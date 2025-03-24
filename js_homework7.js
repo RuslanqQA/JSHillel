@@ -20,10 +20,3 @@ var re = /@gmail\.com$|@yahoo\.com$/;
 var trustedEmails = arr.filter(user => re.test(user.email)).map(user => user.email);
 
 console.log(trustedEmails);
-
-// Фільтрація довірених email-адрес
-// var trustedEmails = arr
-//     .map(user => user.email)
-//     .filter(email => /@gmail\.com$|@yahoo\.com$/.test(email));
-
-// console.log(trustedEmails);

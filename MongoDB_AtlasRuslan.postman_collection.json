@@ -1,0 +1,305 @@
+{
+	"info": {
+		"_postman_id": "8361975b-724c-485c-a0b9-bf376427e79d",
+		"name": "MongoDB_AtlasRuslan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36469582"
+	},
+	"item": [
+		{
+			"name": "Створення",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Document created successfully\", function () {",
+							"    pm.response.to.have.status(201);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"_id\");",
+							"    pm.expect(jsonData.name).to.equal(\"TestRuslan\");",
+							"});",
+							"pm.collectionVariables.set(\"docId_local\", pm.response.json()._id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Access-Control-Request-Headers",
+						"value": "*"
+					},
+					{
+						"key": "api-key",
+						"value": "{{newAPIkey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"TestRuslan\",\n  \"email\": \"marshtupa.ruslan@gmail.com\",\n  \"password\": \"Password7&\",\n  \"__v\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/testRuslan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"testRuslan"
+					]
+				},
+				"description": "Using the `/findOne` endpoint will let you retrieve a single document from a collection. Use the `filter` property in the request body to specify the search criteria. If more than one document matches the criteria, only the first match will be returned."
+			},
+			"response": []
+		},
+		{
+			"name": "Пошук за айді",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {",
+							"    var jsonData = pm.response.json();",
+							"    pm.test(\"Response time is less than 200ms\", function () {",
+							"        pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"    });",
+							"}",
+							"else{",
+							"    console.log(`Check your request, response status code is  - `, pm.response.code);",
+							"    console.log(\"Request was: \", pm.request.url);",
+							"    console.log(pm.response.json())",
+							"    postman.setNextRequest(null);",
+							"}",
+							"// pm.collectionVariables.set(\"docId_local\", jsonData[0]._id);",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Access-Control-Request-Headers",
+						"value": "*"
+					},
+					{
+						"key": "api-key",
+						"value": "{{newAPIkey}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/testRuslan/search/query?_id={{docId_local}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"testRuslan",
+						"search",
+						"query"
+					],
+					"query": [
+						{
+							"key": "_id",
+							"value": "{{docId_local}}"
+						}
+					]
+				},
+				"description": "Using the `/findOne` endpoint will let you retrieve a single document from a collection. Use the `filter` property in the request body to specify the search criteria. If more than one document matches the criteria, only the first match will be returned."
+			},
+			"response": []
+		},
+		{
+			"name": "Оновлення документа",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Document updated successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.equal(\"Ruslan Marshtupa\");\r",
+							"    pm.expect(jsonData.age).to.equal(24);\r",
+							"    pm.expect(jsonData.city).to.equal(\"Lviv\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Ruslan Marshtupa\",\r\n  \"age\": 24,\r\n  \"city\": \"Lviv\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/testRuslan/{{docId_local}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"testRuslan",
+						"{{docId_local}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Видалення",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Document deleted successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"message\").and.to.equal(\"Документ видалено\");\r",
+							"    pm.expect(jsonData).to.have.property(\"deletedDocument\");\r",
+							"    pm.expect(jsonData.deletedDocument).to.be.an(\"object\");\r",
+							"    pm.expect(jsonData.deletedDocument).to.have.property(\"_id\").and.to.equal(pm.environment.get(\"deletedId\")); // Перевіряємо _id\r",
+							"    pm.expect(jsonData.deletedDocument).to.have.property(\"name\");\r",
+							"    pm.expect(jsonData.deletedDocument).to.have.property(\"email\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/testRuslan/{{docId_local}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"testRuslan",
+						"{{docId_local}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Отримання всих документів",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Retrieved limited documents successfully\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"    pm.expect(jsonData.length).to.be.at.most(3); // Перевіряємо, що не більше 5 документів\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/testRuslan/search/query?name=TestRuslan4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"testRuslan",
+						"search",
+						"query"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "TestRuslan4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "docId_local",
+			"value": ""
+		}
+	]
+}
